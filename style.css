@@ -1,0 +1,64 @@
+/* azul ciano: #0cecf8 
+   roxo: #7E73D1
+   rosa: #f914a5
+*/
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: black;
+    color: white;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    gap: 12px;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.logo-titulo {
+    max-width: 700px; 
+    width: 100%;     
+    height: auto;
+    display: flex;
+    justify-content: center; 
+    margin: 0 auto; 
+    padding: 0 20px;
+}
+
+.barra-progresso {
+    background: linear-gradient(to right, #0cecf8, #7E73D1, #f914a5);
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 12px;
+    max-width: 1100px;
+    height: auto;
+}
+
+.lista-etapas {
+    display: flex;
+    list-style: none;
+    justify-content: space-between; 
+    position: relative;
+    padding: 5px;
+}
+
+.etapa-item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+}
+
+.etapa-item .circulo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
+

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plataforma de Ingressos – Demo</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --card: #111823;
+      --accent: #4f8cff;
+      --muted: #a8b3c7;
+      --ok: #1fbf74;
+      --warn: #ffb020;
+      --danger: #ff5d5d;
+      --ring: rgba(79, 140, 255, 0.55);
+      --radius: 16px;
+    }
+    html, body { height: 100%; background: var(--bg); color: #e8eef8; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
+    * { box-sizing: border-box; }
+    a { color: var(--accent); }
+    .app { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .logo { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #4f8cff, #8a5cff); display: grid; place-items: center; font-weight: 800; }
+    .logo span { font-size: 18px; }
+    .card { background: var(--card); border: 1px solid #1e2736; border-radius: var(--radius); box-shadow: 0 10px 25px rgba(0,0,0,.35); }
+    .grid { display: grid; gap: 16px; }
+
+    /* Nav/steps */
+    .steps { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin: 10px 0 20px; }
+    .step { padding: 10px 12px; border-radius: 12px; background: #0f1520; border: 1px solid #1a2535; color: var(--muted); font-size: 13px; text-align: center; }
+    .step.active { color: #fff; border-color: var(--accent); box-shadow: 0 0 0 2px var(--ring); }
+
+    /* Screens */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* Eventos */
+    .events { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .event-card { overflow: hidden; position: relative; }
+    .event-card img { width: 100%; height: 160px; object-fit: cover; display: block; }
+    .event-body { padding: 12px; }
+    .event-title { font-weight: 700; margin-bottom: 6px; }
+    .event-meta { color: var(--muted); font-size: 13px; }
+    .event-actions { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-top: 1px solid #1e2736; }
+    .btn { appearance: none; border: 1px solid #2a3b55; background: #132032; color: #e8eef8; padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 600; }
+    .btn:hover { border-color: var(--accent); }
+    .btn.primary { background: linear-gradient(135deg, #4f8cff, #6e7dff); border: none; }
+    .btn.ghost { background: transparent; }
+
+    /* Modal */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal { width: min(820px, 100%); }
+    .modal-backdrop.show { display: flex; }
+    .modal-header { display:flex; justify-content: space-between; align-items:center; padding: 14px 16px; border-bottom: 1px solid #1e2736; }
+    .modal-body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; }
+    .modal-body img { width: 100%; border-radius: 12px; height: 240px; object-fit: cover; }
+
+    /* Setores & assentos */
+    .sectors { display:grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-top: 12px; }
+    .sector { padding: 12px; border: 1px solid #1e2736; border-radius: 14px; background: #0f1623; cursor: pointer; }
+    .sector.selected { outline: 2px solid var(--accent); }
+    .sector h4 { margin: 0 0 6px; }
+    .sector small { color: var(--muted); }
+
+    .seat-legend { display:flex; gap: 12px; align-items:center; margin: 12px 0; color: var(--muted); font-size: 14px; }
+    .dot { width: 14px; height: 14px; border-radius: 4px; display:inline-block; border: 1px solid #1e2736; }
+    .free { background:#17324d; }
+    .taken { background:#3a1e27; }
+    .yours { background:#1e3f2d; }
+
+    .seat-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 6px; padding: 12px; background:#0c141f; border: 1px solid #1e2736; border-radius: 12px; }
+    .seat { aspect-ratio: 1/1; display:grid; place-items:center; font-size: 12px; border-radius: 6px; background:#132032; border: 1px solid #1e2736; cursor: pointer; }
+    .seat.taken { background:#2a1620; color:#888; cursor:not-allowed; }
+    .seat.selected { background:#123423; border-color:#1d6a44; }
+
+    .qty { display:flex; align-items:center; gap:8px; }
+    .qty input { width: 80px; padding: 8px; border-radius: 10px; border:1px solid #2a3b55; background:#0d1625; color:#fff; }
+
+    /* Serviços */
+    .services { display:grid; gap: 10px; margin-top: 10px; }
+    .service-item { display:flex; justify-content: space-between; align-items:center; padding: 10px; border:1px solid #1e2736; border-radius: 12px; background:#0f1623; }
+
+    /* Form */
+    form { display:grid; gap: 10px; }
+    .row { display:grid; grid-template-columns: repeat(12, 1fr); gap: 10px; }
+    .col-6 { grid-column: span 6; }
+    .col-4 { grid-column: span 4; }
+    .col-3 { grid-column: span 3; }
+    .col-12 { grid-column: span 12; }
+    label { display:block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+    input, select { width: 100%; padding: 10px; border-radius: 12px; border:1px solid #2a3b55; background:#0d1625; color:#fff; }
+    input:focus, select:focus { outline: none; box-shadow: 0 0 0 2px var(--ring); border-color: var(--accent); }
+    .hint { font-size: 12px; color: var(--muted); }
+    .error { color: var(--danger); font-size: 12px; }
+
+    /* Footer actions */
+    .actions { display:flex; justify-content: space-between; align-items:center; margin-top: 16px; }
+    .price { font-weight: 800; }
+
+    /* Review */
+    .review { display:grid; gap: 12px; }
+    .review-item { display:flex; justify-content: space-between; gap: 20px; padding: 12px; border:1px solid #1e2736; border-radius: 12px; background:#0f1623; }
+
+    @media (max-width: 860px) {
+      .modal-body { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 1fr; }
+      .col-6, .col-4, .col-3, .col-12 { grid-column: 1/-1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="logo"><span>TI</span></div>
+      <div>
+        <h1 style="margin:0">Tickets Infinity</h1>
+        <div style="color:var(--muted); font-size:14px">Demo acadêmica – HTML/CSS/JS puro</div>
+      </div>
+    </header>
+
+    <nav class="steps">
+      <div class="step active" data-step="0">Eventos</div>
+      <div class="step" data-step="1">Setores/Assentos</div>
+      <div class="step" data-step="2">Serviços</div>
+      <div class="step" data-step="3">Pagamento</div>
+      <div class="step" data-step="4">Revisão</div>
+    </nav>
+
+    <!-- Screen: Eventos -->
+    <section id="screen-events" class="screen active">
+      <div class="grid events">
+        <!-- Cards renderizados via JS -->
+      </div>
+    </section>
+
+    <!-- Screen: Setores & Assentos -->
+    <section id="screen-seats" class="screen">
+      <div class="card" style="padding:16px">
+        <h2 id="seats-event-title" style="margin: 0 0 6px"></h2>
+        <div class="hint" id="seats-event-meta"></div>
+
+        <h3 style="margin-top:16px">Selecione o setor</h3>
+        <div class="sectors" id="sector-list"></div>
+
+        <div id="seat-tools" style="display:none">
+          <h3 style="margin-top:16px">Assentos / Quantidade</h3>
+          <div class="seat-legend">
+            <span><span class="dot free"></span> Livre</span>
+            <span><span class="dot taken"></span> Ocupado</span>
+            <span><span class="dot yours"></span> Selecionado</span>
+          </div>
+          <div id="seat-grid" class="seat-grid"></div>
+          <div id="qty-box" class="qty" style="display:none; margin-top: 10px">
+            <label for="qty">Quantidade:</label>
+            <input id="qty" type="number" min="1" max="10" value="1" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" id="back-to-events">Voltar</button>
+          <div style="display:flex; align-items:center; gap:12px">
+            <div class="price" id="seats-total">Total: R$ 0,00</div>
+            <button class="btn primary" id="to-services" disabled>Continuar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen: Serviços adicionais -->
+    <section id="screen-services" class="screen">
+      <div class="card" style="padding:16px">
+        <h2>Serviços adicionais</h2>
+        <div id="services-info" class="hint"></div>
+        <div id="services-list" class="services" style="margin-top:8px"></div>
+        <div class="actions">
+          <button class="btn ghost" id="back-to-seats">Voltar</button>
+          <div style="display:flex; align-items:center; gap:12px">
+            <div class="price" id="services-total">Total: R$ 0,00</div>
+            <button class="btn primary" id="to-payment">Ir para Pagamento</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen: Pagamento -->
+    <section id="screen-payment" class="screen">
+      <div class="card" style="padding:16px">
+        <h2>Pagamento</h2>
+        <form id="payment-form" novalidate>
+          <div class="row">
+            <div class="col-6">
+              <label>Nome impresso no cartão</label>
+              <input id="cardName" placeholder="Ex.: MARIA S DA SILVA" />
+              <div class="error" data-error-for="cardName"></div>
+            </div>
+            <div class="col-6">
+              <label>CPF</label>
+              <input id="cpf" placeholder="000.000.000-00" />
+              <div class="error" data-error-for="cpf"></div>
+            </div>
+            <div class="col-6">
+              <label>Nº do cartão</label>
+              <input id="cardNumber" inputmode="numeric" placeholder="0000 0000 0000 0000" />
+              <div class="error" data-error-for="cardNumber"></div>
+            </div>
+            <div class="col-3">
+              <label>Validade (MM/AA)</label>
+              <input id="expiry" placeholder="MM/AA" />
+              <div class="error" data-error-for="expiry"></div>
+            </div>
+            <div class="col-3">
+              <label>CVV</label>
+              <input id="cvv" inputmode="numeric" placeholder="***" />
+              <div class="error" data-error-for="cvv"></div>
+            </div>
+            <div class="col-6">
+              <label>E-mail para confirmação</label>
+              <input id="email" type="email" placeholder="voce@email.com" />
+              <div class="error" data-error-for="email"></div>
+            </div>
+            <div class="col-6">
+              <label>Nº de parcelas</label>
+              <select id="installments">
+                <option value="1">À vista (1x)</option>
+                <option value="2">2x</option>
+                <option value="3">3x</option>
+                <option value="4">4x</option>
+                <option value="5">5x</option>
+                <option value="6">6x</option>
+                <option value="10">10x</option>
+                <option value="12">12x</option>
+              </select>
+            </div>
+          </div>
+        </form>
+        <div class="actions">
+          <button class="btn ghost" id="back-to-services">Voltar</button>
+          <div style="display:flex; align-items:center; gap:12px">
+            <div class="price" id="payment-total">Total: R$ 0,00</div>
+            <button class="btn primary" id="to-review">Revisar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen: Revisão -->
+    <section id="screen-review" class="screen">
+      <div class="card" style="padding:16px">
+        <h2>Revisão do pedido</h2>
+        <div class="review" id="review"></div>
+        <div class="actions">
+          <button class="btn ghost" id="back-to-payment">Voltar</button>
+          <div style="display:flex; align-items:center; gap:12px">
+            <div class="price" id="review-total">Total: R$ 0,00</div>
+            <button class="btn primary" id="confirm-order">Confirmar compra</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Detalhes do Evento -->
+    <div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="card modal">
+        <div class="modal-header">
+          <h3 id="modal-title" style="margin:0"></h3>
+          <button class="btn" id="modal-close">Fechar</button>
+        </div>
+        <div class="modal-body">
+          <img id="modal-img" alt="poster" />
+          <div>
+            <p id="modal-desc" style="margin-top:0"></p>
+            <div id="modal-info" class="hint"></div>
+            <h4 style="margin:14px 0 6px">Setores & preços</h4>
+            <ul id="modal-sectors" style="margin:0; padding-left:18px"></ul>
+          </div>
+        </div>
+        <div class="event-actions">
+          <button class="btn primary" id="modal-select">Selecionar este evento</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --------------------------
+    // Dados simulados
+    // --------------------------
+    const events = [
+      {
+        id: 'e1',
+        name: 'Lollapalooza Night',
+        artists: 'Dua Lipa, Arctic Monkeys, Alok',
+        date: '12/10/2025',
+        time: '18:00',
+        venue: 'Arena Aurora – São Paulo/SP',
+        img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1400&auto=format&fit=crop',
+        desc: 'Festival multi-palcos com line-up internacional, food trucks e experiências imersivas.',
+        sectors: [
+          { code: 'PP', name: 'Pista Premium', price: 680, seated: false },
+          { code: 'PC', name: 'Pista Comum', price: 320, seated: false },
+          { code: 'CAM', name: 'Camarote', price: 1200, seated: true, rows: 6, cols: 12 },
+          { code: 'MEZ', name: 'Mezanino', price: 450, seated: true, rows: 5, cols: 12 },
+          { code: 'CAD', name: 'Cadeiras Numeradas', price: 390, seated: true, rows: 8, cols: 12 },
+        ]
+      },
+      {
+        id: 'e2',
+        name: 'Rock Vibes Tour',
+        artists: 'Imagine Dragons, The Killers',
+        date: '30/11/2025',
+        time: '20:00',
+        venue: 'Estádio Horizonte – Curitiba/PR',
+        img: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1400&auto=format&fit=crop',
+        desc: 'Turnê com palco 360º, pirotecnia e telões 8K. Ingressos limitados.',
+        sectors: [
+          { code: 'PP', name: 'Pista Premium', price: 740, seated: false },
+          { code: 'PC', name: 'Pista', price: 300, seated: false },
+          { code: 'CAD', name: 'Cadeiras Numeradas', price: 420, seated: true, rows: 10, cols: 12 },
+        ]
+      },
+      {
+        id: 'e3',
+        name: 'Sunset EDM Fest',
+        artists: 'Vintage Culture, Martin Garrix, Illenium',
+        date: '21/12/2025',
+        time: '17:00',
+        venue: 'Parque das Águas – Rio de Janeiro/RJ',
+        img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1400&auto=format&fit=crop',
+        desc: 'Edição especial pé na areia com 3 palcos simultâneos e cenografia futurista.',
+        sectors: [
+          { code: 'PP', name: 'Pista Premium', price: 580, seated: false },
+          { code: 'PC', name: 'Pista Comum', price: 260, seated: false },
+          { code: 'CAM', name: 'Camarote', price: 980, seated: true, rows: 4, cols: 12 },
+        ]
+      }
+    ];
+
+    // Serviços dependentes do setor
+    const serviceCatalog = {
+      default: [
+        { id: 'est', name: 'Estacionamento', price: 40 },
+        { id: 'transf', name: 'Transfer oficial', price: 65 },
+        { id: 'merch', name: 'Kit merchandising', price: 120 },
+      ],
+      PP: [ { id: 'backstage', name: 'Acesso ao backstage', price: 350 } ],
+      CAM: [ { id: 'openbar', name: 'Open bar', price: 280 }, { id: 'buffet', name: 'Buffet premium', price: 220 } ],
+    };
+
+    // Ocupação simulada por evento+setor (mapa linear rows*cols => boolean)
+    const takenSeats = {};
+
+    // Estado global simples
+    const state = {
+      event: null,        // objeto do evento
+      sector: null,       // objeto do setor
+      seats: [],          // assentos selecionados ex: ['A05','A06']
+      qty: 1,             // para setores sem assento
+      services: [],       // ids de serviços selecionados
+      payment: {},
+    };
+
+    const currency = (n) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    // --------------------------
+    // Util: steps & screens
+    // --------------------------
+    function setActiveStep(i) {
+      document.querySelectorAll('.step').forEach((el, idx) => {
+        el.classList.toggle('active', idx === i);
+      });
+    }
+    function showScreen(id, stepIndex) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      setActiveStep(stepIndex);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --------------------------
+    // Tela: Eventos
+    // --------------------------
+    const eventsContainer = document.querySelector('.events');
+
+    function renderEvents() {
+      eventsContainer.innerHTML = '';
+      events.forEach(ev => {
+        const card = document.createElement('div');
+        card.className = 'card event-card';
+        card.innerHTML = `
+          <img src="${ev.img}" alt="${ev.name}" />
+          <div class="event-body">
+            <div class="event-title">${ev.name}</div>
+            <div class="event-meta">${ev.artists}</div>
+            <div class="hint">${ev.venue}</div>
+          </div>
+          <div class="event-actions">
+            <button class="btn ghost" data-action="details">Detalhes</button>
+            <button class="btn primary" data-action="select">Selecionar</button>
+          </div>
+        `;
+        // Actions
+        card.querySelector('[data-action="details"]').addEventListener('click', () => openEventModal(ev));
+        card.querySelector('[data-action="select"]').addEventListener('click', () => selectEvent(ev));
+        eventsContainer.appendChild(card);
+      });
+    }
+
+    // Modal de eventos
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalImg = document.getElementById('modal-img');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalInfo = document.getElementById('modal-info');
+    const modalSectors = document.getElementById('modal-sectors');
+
+    function openEventModal(ev) {
+      modalTitle.textContent = ev.name;
+      modalImg.src = ev.img;
+      modalDesc.textContent = ev.desc;
+      modalInfo.textContent = `Data: ${ev.date} • Horário: ${ev.time} • Local: ${ev.venue}`;
+      modalSectors.innerHTML = '';
+      ev.sectors.forEach(s => {
+        const li = document.createElement('li');
+        li.textContent = `${s.name} — ${currency(s.price)}${s.seated ? ' (lugares numerados)' : ''}`;
+        modalSectors.appendChild(li);
+      });
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+      document.getElementById('modal-select').onclick = () => { modal.classList.remove('show'); selectEvent(ev); };
+    }
+    document.getElementById('modal-close').addEventListener('click', () => { modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); });
+    modal.addEventListener('click', (e) => { if (e.target === modal) { modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); } });
+
+    function selectEvent(ev) {
+      state.event = ev; state.sector = null; state.seats = []; state.qty = 1; state.services = []; state.payment = {};
+      document.getElementById('seats-event-title').textContent = ev.name;
+      document.getElementById('seats-event-meta').textContent = `${ev.date} • ${ev.time} • ${ev.venue}`;
+      renderSectors();
+      updateSeatsTotal();
+      showScreen('screen-seats', 1);
+    }
+
+    // --------------------------
+    // Tela: Setores & Assentos
+    // --------------------------
+    const sectorList = document.getElementById('sector-list');
+    const seatGrid = document.getElementById('seat-grid');
+    const qtyBox = document.getElementById('qty-box');
+    const qtyInput = document.getElementById('qty');
+
+    function renderSectors() {
+      const ev = state.event; if (!ev) return;
+      sectorList.innerHTML = '';
+      ev.sectors.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'sector';
+        el.innerHTML = `<h4>${s.name}</h4><div class="hint">${s.seated ? 'Lugares numerados' : 'Acesso por quantidade'}</div><small>Preço: ${currency(s.price)}</small>`;
+        el.addEventListener('click', () => selectSector(s, el));
+        sectorList.appendChild(el);
+      });
+    }
+
+    function selectSector(sector, el) {
+      state.sector = sector; state.seats = []; state.qty = 1;
+      document.querySelectorAll('.sector').forEach(x => x.classList.remove('selected'));
+      el.classList.add('selected');
+
+      document.getElementById('seat-tools').style.display = 'block';
+      seatGrid.innerHTML = '';
+      qtyBox.style.display = sector.seated ? 'none' : 'flex';
+
+      if (sector.seated) {
+        const rows = sector.rows || 8, cols = sector.cols || 12;
+        // inicializa takenSeats para o par evento-setor se ainda não existir
+        const key = `${state.event.id}-${sector.code}`;
+        if (!takenSeats[key]) {
+          const total = rows * cols; const set = new Set();
+          // marca 15% aleatórios como ocupados
+          while (set.size < Math.floor(total * 0.15)) {
+            set.add(Math.floor(Math.random() * total));
+          }
+          takenSeats[key] = set;
+        }
+        seatGrid.style.display = 'grid';
+        seatGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const idx = r * cols + c;
+            const seat = document.createElement('div');
+            seat.className = 'seat';
+            const label = String.fromCharCode(65 + r) + String(c + 1).padStart(2,'0');
+            seat.textContent = label;
+            const key = `${state.event.id}-${sector.code}`;
+            const taken = takenSeats[key].has(idx);
+            if (taken) seat.classList.add('taken');
+            seat.addEventListener('click', () => toggleSeat(seat, label, taken));
+            seatGrid.appendChild(seat);
+          }
+        }
+      } else {
+        seatGrid.style.display = 'none';
+      }
+
+      updateSeatsTotal();
+      document.getElementById('to-services').disabled = true;
+    }
+
+    function toggleSeat(el, label, isTaken) {
+      if (isTaken) return; // não seleciona
+      const i = state.seats.indexOf(label);
+      if (i >= 0) { state.seats.splice(i,1); el.classList.remove('selected'); }
+      else { state.seats.push(label); el.classList.add('selected'); }
+      document.getElementById('to-services').disabled = state.seats.length === 0;
+      updateSeatsTotal();
+    }
+
+    qtyInput.addEventListener('input', () => {
+      const v = Math.max(1, Math.min(10, parseInt(qtyInput.value || '1', 10)));
+      qtyInput.value = v; state.qty = v; document.getElementById('to-services').disabled = false; updateSeatsTotal();
+    });
+
+    function updateSeatsTotal() {
+      const sector = state.sector; if (!sector) { document.getElementById('seats-total').textContent = 'Total: R$ 0,00'; return; }
+      const count = sector.seated ? state.seats.length : state.qty;
+      const total = count * sector.price;
+      document.getElementById('seats-total').textContent = `Total: ${currency(total)}`;
+    }
+
+    document.getElementById('back-to-events').addEventListener('click', () => showScreen('screen-events', 0));
+    document.getElementById('to-services').addEventListener('click', () => {
+      renderServices();
+      showScreen('screen-services', 2);
+    });
+
+    // --------------------------
+    // Tela: Serviços
+    // --------------------------
+    const servicesInfo = document.getElementById('services-info');
+    const servicesList = document.getElementById('services-list');
+
+    function renderServices() {
+      const s = state.sector; const ev = state.event;
+      servicesInfo.textContent = `${ev.name} • ${s.name} (${currency(s.price)})`;
+      servicesList.innerHTML = '';
+      const items = [...serviceCatalog.default, ...(serviceCatalog[s.code] || [])];
+      items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'service-item';
+        row.innerHTML = `
+          <div>
+            <strong>${item.name}</strong>
+            <div class="hint">${currency(item.price)}</div>
+          </div>
+          <label><input type="checkbox" data-id="${item.id}"> Adicionar</label>
+        `;
+        row.querySelector('input').addEventListener('change', (e) => toggleService(item.id, e.target.checked));
+        servicesList.appendChild(row);
+      });
+      updateServicesTotal();
+    }
+
+    function toggleService(id, checked) {
+      if (checked) { if (!state.services.includes(id)) state.services.push(id); }
+      else { state.services = state.services.filter(x => x !== id); }
+      updateServicesTotal();
+    }
+
+    function updateServicesTotal() {
+      const base = (state.sector ? (state.sector.seated ? state.seats.length : state.qty) * state.sector.price : 0);
+      const items = [...serviceCatalog.default, ...(serviceCatalog[state.sector?.code] || [])];
+      const extras = state.services.reduce((sum, id) => {
+        const it = items.find(x => x.id === id); return sum + (it ? it.price : 0);
+      }, 0);
+      document.getElementById('services-total').textContent = `Total: ${currency(base + extras)}`;
+      document.getElementById('payment-total').textContent = `Total: ${currency(base + extras)}`;
+      document.getElementById('review-total').textContent = `Total: ${currency(base + extras)}`;
+    }
+
+    document.getElementById('back-to-seats').addEventListener('click', () => showScreen('screen-seats', 1));
+    document.getElementById('to-payment').addEventListener('click', () => showScreen('screen-payment', 3));
+
+    // --------------------------
+    // Tela: Pagamento
+    // --------------------------
+    const validators = {
+      cardName: v => /\b\p{L}{2,}(?:\s+\p{L}{2,})+/u.test(v) || 'Informe o nome completo como impresso no cartão.',
+      cpf: v => validateCPF(v) || 'CPF inválido.',
+      expiry: v => /^\d{2}\/\d{2}$/.test(v) && futureExpiry(v) || 'Use MM/AA e uma data futura.',
+      cvv: v => /^\d{3,4}$/.test(v) || 'CVV deve ter 3 ou 4 dígitos.',
+      email: v => /.+@.+\..+/.test(v) || 'E-mail inválido.',
+    };
+
+    function showFieldError(id, msg) {
+      const el = document.querySelector(`[data-error-for="${id}"]`); el.textContent = msg || '';
+    }
+
+    function validateForm() {
+      let ok = true;
+      Object.keys(validators).forEach(id => {
+        const input = document.getElementById(id);
+        const v = input.value.trim();
+        const res = validators[id](v);
+        if (res !== true) { showFieldError(id, res); ok = false; } else showFieldError(id, '');
+      });
+      return ok;
+    }
+
+    function luhn(num) { // validação simples de cartão
+      if (!/^\d{13,19}$/.test(num)) return false;
+      let sum = 0, shouldDouble = false;
+      for (let i = num.length - 1; i >= 0; i--) {
+        let digit = parseInt(num[i], 10);
+        if (shouldDouble) { digit *= 2; if (digit > 9) digit -= 9; }
+        sum += digit; shouldDouble = !shouldDouble;
+      }
+      return sum % 10 === 0;
+    }
+
+    function futureExpiry(mmYY) {
+      const [mm, yy] = mmYY.split('/').map(x => parseInt(x, 10));
+      if (mm < 1 || mm > 12) return false;
+      const now = new Date();
+      const year = 2000 + yy; // suposição
+      const exp = new Date(year, mm, 0, 23, 59, 59);
+      return exp >= new Date(now.getFullYear(), now.getMonth(), 1);
+    }
+
+    function validateCPF(cpf) {
+      const digits = (cpf || '').replace(/\D/g, '');
+      if (!/^[0-9]{11}$/.test(digits)) return false;
+      if (/^(\d)\1+$/.test(digits)) return false;
+      const calc = (base) => {
+        let sum = 0; for (let i = 0; i < base; i++) sum += parseInt(digits[i]) * (base + 1 - i);
+        let r = (sum * 10) % 11; return r === 10 ? 0 : r;
+      };
+      const d1 = calc(9), d2 = calc(10);
+      return d1 === parseInt(digits[9]) && d2 === parseInt(digits[10]);
+    }
+
+    document.getElementById('to-review').addEventListener('click', () => {
+      if (!validateForm()) { alert('Verifique os campos destacados.'); return; }
+      // Guarda campos
+      state.payment = {
+        name: document.getElementById('cardName').value.trim(),
+        cpf: document.getElementById('cpf').value.trim(),
+        card: document.getElementById('cardNumber').value.trim().replace(/\s+/g,' '),
+        expiry: document.getElementById('expiry').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        installments: parseInt(document.getElementById('installments').value, 10),
+      };
+      renderReview();
+      showScreen('screen-review', 4);
+    });
+    document.getElementById('back-to-services').addEventListener('click', () => showScreen('screen-services', 2));
+
+    // --------------------------
+    // Tela: Revisão
+    // --------------------------
+    function renderReview() {
+      const list = document.getElementById('review');
+      list.innerHTML = '';
+      const ev = state.event, s = state.sector;
+      const qty = s.seated ? state.seats.length : state.qty;
+      const base = qty * s.price;
+      const items = [...serviceCatalog.default, ...(serviceCatalog[s.code] || [])];
+      const chosen = state.services.map(id => items.find(x => x.id === id)).filter(Boolean);
+      const extras = chosen.reduce((acc, it) => acc + it.price, 0);
+      const total = base + extras;
+
+      const rows = [
+        ['Evento', `${ev.name} — ${ev.date} ${ev.time} @ ${ev.venue}`],
+        ['Setor', `${s.name} (${currency(s.price)})`],
+        [s.seated ? 'Assentos' : 'Quantidade', s.seated ? state.seats.join(', ') : String(state.qty)],
+        ['Serviços', chosen.length ? chosen.map(it => `${it.name} (${currency(it.price)})`).join(' • ') : 'Nenhum'],
+        ['Pagamento', `${state.payment.name} • ${state.payment.card} • ${state.payment.expiry} • ${state.payment.installments}x`],
+        ['Contato', `${state.payment.email} • CPF ${state.payment.cpf}`],
+      ];
+      rows.forEach(([k, v]) => {
+        const row = document.createElement('div'); row.className = 'review-item';
+        row.innerHTML = `<div class="hint">${k}</div><div>${v}</div>`; list.appendChild(row);
+      });
+      document.getElementById('review-total').textContent = `Total: ${currency(total)}`;
+    }
+
+    document.getElementById('confirm-order').addEventListener('click', () => {
+      const ev = state.event, s = state.sector;
+      // Se tiver assentos numerados, marcamos como ocupados
+      if (s.seated) {
+        const cols = s.cols || 12;
+        const key = `${ev.id}-${s.code}`;
+        const set = takenSeats[key] || new Set();
+        state.seats.forEach(label => {
+          const r = label.charCodeAt(0) - 65;
+          const c = parseInt(label.slice(1), 10) - 1;
+          const idx = r * cols + c; set.add(idx);
+        });
+        takenSeats[key] = set;
+      }
+      alert('Obrigado! Sua compra foi confirmada. Retornando à tela inicial.');
+      // reset simples
+      state.event = null; state.sector = null; state.seats = []; state.qty = 1; state.services = []; state.payment = {};
+      document.getElementById('payment-form').reset();
+      renderEvents();
+      showScreen('screen-events', 0);
+    });
+
+    // --------------------------
+    // Navegação básica
+    // --------------------------
+    document.getElementById('back-to-payment').addEventListener('click', () => showScreen('screen-payment', 3));
+
+    // Inicializa
+    renderEvents();
+  </script>
+</body>
+</html>
