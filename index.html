@@ -15,28 +15,29 @@
     </header>
 
     <main>
+        <!--BARRA DE PROGRESSO-->
         <nav class="barra-progresso">
             <ul class="lista-etapas">
                 <li class="etapa-item ativa">
                     <div class="circulo">1</div>
                     <span class="etapa-texto">Evento</span>
                 </li>
-        
+
                 <li class="etapa-item ativa">
                     <div class="circulo">2</div>
                     <span class="etapa-texto">Setores/Assentos</span>
                 </li>
-        
+
                 <li class="etapa-item ativa">
                     <div class="circulo">3</div>
                     <span class="etapa-texto">Serviços</span>
                 </li>
-        
+
                 <li class="etapa-item ativa">
                     <div class="circulo">4</div>
                     <span class="etapa-texto">Pagamento</span>
                 </li>
-        
+
                 <li class="etapa-item ativa">
                     <div class="circulo">5</div>
                     <span class="etapa-texto">Revisão</span>
@@ -44,12 +45,49 @@
             </ul>
         </nav>
 
+        <div id="modal-detalhes" class="modal">
+            <div class="modal-conteudo">
+                <span class="modal-fechar" id="fechar-modal">&times;</span>
+                <h2 id="modal-titulo"></h2>
+                <p id="modal-descricao"></p>
+            </div>
+        </div>
+
+        <!--EVENTOS-->
+        <section id="tela-eventos" class="tela ativa">
+            <h2 class="titulo-eventos">Selecione o Evento</h2>
+            <div class="eventos-container">
+                <div class="box-evento" data-evento-id="1"> <img src="imagens/rock_in_rio.png" alt="Rock in Rio"
+                        class="evento-imagem">
+                    <h2>Rock in Rio</h2>
+                    <p>Parque Olímpico - Rio de Janeiro/RJ</p>
+                    <button class="botao-detalhes">Detalhes</button>
+                    <button class="botao-selecionar">Selecionar</button>
+                </div>
+                <div class="box-evento" data-evento-id="2">
+                    <img src="imagens/tomorrowland.png" alt="Tomorrowland Brasil" class="evento-imagem">
+                    <h2>Tomorrowland Brasil</h2>
+                    <p>Parque Maeda - Itu/SP</p>
+                    <button class="botao-detalhes">Detalhes</button>
+                    <button class="botao-selecionar">Selecionar</button>
+                </div>
+                <div class="box-evento" data-evento-id="3">
+                    <img src="imagens/lollapalooza.png" alt="Lollapalooza" class="evento-imagem">
+                    <h2>Lollapalooza</h2>
+                    <p>Autódromo de Interlagos - São Paulo/SP</p>
+                    <button class="botao-detalhes">Detalhes</button>
+                    <button class="botao-selecionar">Selecionar</button>
+                </div>
+            </div>
+
+        </section>
+
     </main>
 
     <footer>
 
     </footer>
-
+    <script src="script.js"></script>
 </body>
 
 </html>
