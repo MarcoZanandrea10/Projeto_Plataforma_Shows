@@ -45,6 +45,7 @@
             </ul>
         </nav>
 
+        <!--Modal Detalhes-->
         <div id="modal-detalhes" class="modal">
             <div class="modal-conteudo">
                 <span class="modal-fechar" id="fechar-modal">&times;</span>
@@ -55,31 +56,79 @@
 
         <!--EVENTOS-->
         <section id="tela-eventos" class="tela ativa">
-            <h2 class="titulo-eventos">Selecione o Evento</h2>
-            <div class="eventos-container">
-                <div class="box-evento" data-evento-id="1"> <img src="imagens/rock_in_rio.png" alt="Rock in Rio"
+            <h2 class="titulos-progresso">Selecione o Evento</h2>
+            <div class="container">
+                <div class="box" data-evento-id="1"> <img src="imagens/rock_in_rio.png" alt="Rock in Rio"
                         class="evento-imagem">
                     <h2>Rock in Rio</h2>
                     <p>Parque Olímpico - Rio de Janeiro/RJ</p>
+                    <hr class="linha-separadora">
                     <button class="botao-detalhes">Detalhes</button>
                     <button class="botao-selecionar">Selecionar</button>
                 </div>
-                <div class="box-evento" data-evento-id="2">
+                <div class="box" data-evento-id="2">
                     <img src="imagens/tomorrowland.png" alt="Tomorrowland Brasil" class="evento-imagem">
                     <h2>Tomorrowland Brasil</h2>
                     <p>Parque Maeda - Itu/SP</p>
+                    <hr class="linha-separadora">
                     <button class="botao-detalhes">Detalhes</button>
                     <button class="botao-selecionar">Selecionar</button>
                 </div>
-                <div class="box-evento" data-evento-id="3">
+                <div class="box" data-evento-id="3">
                     <img src="imagens/lollapalooza.png" alt="Lollapalooza" class="evento-imagem">
                     <h2>Lollapalooza</h2>
                     <p>Autódromo de Interlagos - São Paulo/SP</p>
+                    <hr class="linha-separadora">
                     <button class="botao-detalhes">Detalhes</button>
                     <button class="botao-selecionar">Selecionar</button>
                 </div>
             </div>
+        </section>
 
+        <!--SETORES/ASSENTOS-->
+        <section id="tela-setores" class="tela" style="display:none;">
+            <h2 class="titulos-progresso">Escolha o Setor/Assento</h2>
+            <div class="container">
+                <div class="box">
+                    <h3>Pista Comum</h3>
+                    <p>R$ 320,00</p>
+                    <button class="botao-selecionar">Selecionar</button>
+                </div>
+                <div class="box">
+                    <h3>Cadeiras Numeradas</h3>
+                    <p>R$ 390,00</p>
+                    <button class="botao-selecionar">Selecionar</button>
+                </div>
+                <div class="box">
+                    <h3>Mezaninos</h3>
+                    <p>R$ 500,00</p>
+                    <button class="botao-selecionar">Selecionar</button>
+                </div>
+                <div class="box">
+                    <h3>Pista Premium</h3>
+                    <p>R$ 680,00</p>
+                    <button class="botao-selecionar">Selecionar</button>
+                </div>
+                <div class="box">
+                    <h3>Camarotes</h3>
+                    <p>R$ 1.500,00</p>
+                    <button class="botao-selecionar">Selecionar</button>
+                </div>
+            </div>
+            <button id="botao-voltar-setores" class="botao-voltar">Voltar</button>
+        </section>
+
+        <!--Botão Avançar na Tela de Lugares-->
+        <section id="tela-lugares" class="tela" style="display:none;">
+            <h2 class="titulos-progresso">Selecione o Lugar</h2>
+            <div class="container" id="container-lugares"></div>
+            <button id="botao-voltar-lugares" class="botao-voltar">Voltar</button>
+            <button id="botao-avancar-lugar">Avançar</button>
+        </section>
+
+        <!--SERVIÇOS-->
+        <section>
+            <!--fazer ainda-->
         </section>
 
     </main>

@@ -75,13 +75,13 @@ header {
     border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
-.titulo-eventos {
+.titulos-progresso {
     text-align: center;
     color: white;
     margin: 25px;
 }
 
-.eventos-container {
+.container {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     display: grid;
     margin: 0 auto; 
@@ -90,7 +90,7 @@ header {
     gap: 25px; 
 }
 
-.box-evento {
+.box {
     background-color: rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 15px rgba(217, 217, 217, 0.2); 
     overflow: hidden; 
@@ -101,15 +101,19 @@ header {
     padding-bottom: 10px;
 }
 
-.box-evento:hover {
+.box:hover {
     transform: translateY(-5px) scale(1.02);
 }
 
-.box-evento .evento-imagem {
+.box .evento-imagem {
     display: block; 
     object-fit: cover; 
     width: 100%;
     height: 200px;
+}
+
+.linha-separadora {
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .botao-detalhes {
@@ -120,18 +124,18 @@ header {
     font-size: 15px;
     margin: 5px;
     border-radius: 12px;
-    width: 150px;
+    width: 120px;
     height: 40px;
 }
 
 .botao-selecionar {
     background: linear-gradient(to right, #0cecf8, #7E73D1, #f914a5);
     color: white;
-    display: inline-block;
+    border: none;
     font-size: 15px;
-    margin: 10px 0 10px 20px;
+    margin: 10px 10px 10px 20px;
     border-radius: 12px;
-    width: 150px;
+    width: 120px;
     height: 40px;
 }
 
@@ -139,39 +143,82 @@ header {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-
-
-
-
-/* REVER A PARTIR DAQUI */
 .modal {
-    display: none;
+    background: rgba(0, 0, 0, 0.7); 
+    display: none; 
+    justify-content: center;
+    align-items: center;
     position: fixed;
-    z-index: 999;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
-    overflow: auto;
-    background: rgba(0,0,0,0.7);
+    z-index: 9999;
 }
 
 .modal-conteudo {
-    background: #222;
-    margin: 10% auto;
+    background: linear-gradient(to right, #0cecf8, #7E73D1, #f914a5);
+    color: white;
+    position: relative;
+    margin: 500px auto;
     padding: 30px;
     border-radius: 16px;
-    max-width: 400px;
-    color: #fff;
-    position: relative;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    max-width: 450px;
 }
 
 .modal-fechar {
+    color: white;
     position: absolute;
+    cursor: pointer;
     top: 12px;
     right: 18px;
     font-size: 28px;
+}
+
+.botao-voltar {
+    border: rgba(255, 255, 255, 0.55) 2px solid;
+    background: #141414;
+    color: white;
+    border: none;
+    display: block;
+    text-align: center;
     cursor: pointer;
-    color: #fff;
+    margin: 20px auto;
+    font-size: 15px;
+    border-radius: 12px;
+    width: 220px;
+    height: 40px;
+}
+
+.botao-voltar:hover {
+    background-color: #3a3a3a;
+}
+
+.botao-lugar {
+    border: rgba(255, 255, 255, 0.3) 1px solid;
+    background: #141414;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    margin: 8px;
+    padding: 12px;
+    font-size: 15px;
+}
+
+.botao-lugar.selecionado {
+    background: #3a3a3a;
+}
+
+#botao-avancar-lugar {
+    background: linear-gradient(to right, #0cecf8, #7E73D1, #f914a5);
+    color: white;
+    border: none;
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    margin: 20px auto;
+    font-size: 15px;
+    border-radius: 12px;
+    width: 220px;
+    height: 40px;
 }
