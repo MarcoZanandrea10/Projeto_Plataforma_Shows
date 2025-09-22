@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-bt">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./imagens/play.png" type="image/x-icon">
     <link href="./style.css" rel="stylesheet">
-    <title>Venda de Ingressos</title>
+    <title>My Ticket</title>
 </head>
 
 <body>
@@ -22,22 +22,18 @@
                     <div class="circulo">1</div>
                     <span class="etapa-texto">Evento</span>
                 </li>
-
                 <li class="etapa-item ativa">
                     <div class="circulo">2</div>
                     <span class="etapa-texto">Setores/Assentos</span>
                 </li>
-
                 <li class="etapa-item ativa">
                     <div class="circulo">3</div>
                     <span class="etapa-texto">Serviços</span>
                 </li>
-
                 <li class="etapa-item ativa">
                     <div class="circulo">4</div>
                     <span class="etapa-texto">Pagamento</span>
                 </li>
-
                 <li class="etapa-item ativa">
                     <div class="circulo">5</div>
                     <span class="etapa-texto">Revisão</span>
@@ -64,7 +60,7 @@
                     <p>Parque Olímpico - Rio de Janeiro/RJ</p>
                     <hr class="linha-separadora">
                     <button class="botao-detalhes">Detalhes</button>
-                    <button class="botao-selecionar">Selecionar</button>
+                    <button class="botao-selecionar-evento">Selecionar</button>
                 </div>
                 <div class="box" data-evento-id="2">
                     <img src="imagens/tomorrowland.png" alt="Tomorrowland Brasil" class="evento-imagem">
@@ -72,7 +68,7 @@
                     <p>Parque Maeda - Itu/SP</p>
                     <hr class="linha-separadora">
                     <button class="botao-detalhes">Detalhes</button>
-                    <button class="botao-selecionar">Selecionar</button>
+                    <button class="botao-selecionar-evento">Selecionar</button>
                 </div>
                 <div class="box" data-evento-id="3">
                     <img src="imagens/lollapalooza.png" alt="Lollapalooza" class="evento-imagem">
@@ -80,7 +76,7 @@
                     <p>Autódromo de Interlagos - São Paulo/SP</p>
                     <hr class="linha-separadora">
                     <button class="botao-detalhes">Detalhes</button>
-                    <button class="botao-selecionar">Selecionar</button>
+                    <button class="botao-selecionar-evento">Selecionar</button>
                 </div>
             </div>
         </section>
@@ -89,30 +85,44 @@
         <section id="tela-setores" class="tela" style="display:none;">
             <h2 class="titulos-progresso">Escolha o Setor/Assento</h2>
             <div class="container">
-                <div class="box">
+                <div class="box" data-setor-nome="Pista Comum" data-setor-preco="320.00">
                     <h3>Pista Comum</h3>
                     <p>R$ 320,00</p>
-                    <button class="botao-selecionar">Selecionar</button>
+                    <label for="quantidade-pista-comum">Quantidade:</label>
+                    <select id="quantidade-pista-comum" class="seletor-quantidade">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <button class="botao-selecionar-setor">Selecionar</button>
                 </div>
-                <div class="box">
-                    <h3>Cadeiras Numeradas</h3>
-                    <p>R$ 390,00</p>
-                    <button class="botao-selecionar">Selecionar</button>
-                </div>
-                <div class="box">
-                    <h3>Mezaninos</h3>
-                    <p>R$ 500,00</p>
-                    <button class="botao-selecionar">Selecionar</button>
-                </div>
-                <div class="box">
+                <div class="box" data-setor-nome="Pista Premium" data-setor-preco="680.00">
                     <h3>Pista Premium</h3>
                     <p>R$ 680,00</p>
-                    <button class="botao-selecionar">Selecionar</button>
+                    <label for="quantidade-pista-premium"></label>
+                    <select id="quantidade-pista-premium" class="seletor-quantidade">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <button class="botao-selecionar-setor">Selecionar</button>
                 </div>
-                <div class="box">
+                <div class="box" data-setor-nome="Camarotes" data-setor-preco="1500.00">
                     <h3>Camarotes</h3>
                     <p>R$ 1.500,00</p>
-                    <button class="botao-selecionar">Selecionar</button>
+                    <label for="quantidade-camarotes">Quantidade:</label>
+                    <select id="quantidade-camarotes" class="seletor-quantidade">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <button class="botao-selecionar-setor">Selecionar</button>
                 </div>
             </div>
             <button id="botao-voltar-setores" class="botao-voltar">Voltar</button>
@@ -123,20 +133,105 @@
             <h2 class="titulos-progresso">Selecione o Lugar</h2>
             <div class="container" id="container-lugares"></div>
             <button id="botao-voltar-lugares" class="botao-voltar">Voltar</button>
-            <button id="botao-avancar-lugar">Avançar</button>
+            <button id="botao-avancar-lugar" class="botao-avancar">Avançar</button>
         </section>
 
         <!--SERVIÇOS-->
-        <section>
-            <!--fazer ainda-->
+        <section id="tela-servicos" class="tela" style="display:none;">
+            <h2 class="titulos-progresso">Serviços Adicionais</h2>
+            <div class="container container-servicos">
+                <label class="box-servico">
+                    <div class="servico-info">
+                        <h3>Estacionamento</h3>
+                        <p>Garanta sua vaga perto do evento.</p>
+                    </div>
+                    <div class="servico-preco">
+                        <p>R$ 50,00</p>
+                        <input type="checkbox" name="servico" value="Estacionamento" data-preco="50.00">
+                    </div>
+                </label>
+                <label class="box-servico">
+                    <div class="servico-info">
+                        <h3>Copo Oficial do Evento</h3>
+                        <p>Leve uma recordação para casa.</p>
+                    </div>
+                    <div class="servico-preco">
+                        <p>R$ 35,00</p>
+                        <input type="checkbox" name="servico" value="Copo Oficial" data-preco="35.00">
+                    </div>
+                </label>
+                <label class="box-servico">
+                    <div class="servico-info">
+                        <h3>Seguro Ingresso</h3>
+                        <p>Proteção contra imprevistos.</p>
+                    </div>
+                    <div class="servico-preco">
+                        <p>R$ 20,00</p>
+                        <input type="checkbox" name="servico" value="Seguro Ingresso" data-preco="20.00">
+                    </div>
+                </label>
+            </div>
+            <button id="botao-voltar-servicos" class="botao-voltar">Voltar</button>
+            <button id="botao-avancar-servicos" class="botao-avancar">Avançar</button>
         </section>
 
+        <!--PAGAMENTO-->
+        <section id="tela-pagamento" class="tela" style="display:none;">
+            <h2 class="titulos-progresso">Pagamento</h2>
+            <div class="container-pagamento">
+
+                <div class="pagamento-form">
+                    <h3>Preencha os dados do cartão</h3>
+                    <div id="detalhes-cartao" class="metodo-pagamento-detalhes">
+                        <form class="form-pagamento">
+                            <label for="num-cartao">Número do Cartão</label>
+                            <input type="text" id="num-cartao" placeholder="0000 0000 0000 0000" required>
+
+                            <label for="nome-cartao">Nome no Cartão</label>
+                            <input type="text" id="nome-cartao" placeholder="Como aparece no cartão" required>
+
+                            <div class="form-linha">
+                                <div>
+                                    <label for="validade-cartao">Validade</label>
+                                    <input type="text" id="validade-cartao" placeholder="MM/AA" required>
+                                </div>
+                                <div>
+                                    <label for="cvv-cartao">CVV</label>
+                                    <input type="text" id="cvv-cartao" placeholder="123" required>
+                                </div>
+                            </div>
+                            <label for="parcelas-cartao">Parcelamento</label>
+                            <select id="parcelas-cartao">
+                                <option value="1">1x sem juros</option>
+                                <option value="2">2x sem juros</option>
+                                <option value="3">3x sem juros</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagamento-resumo">
+                <h2 class="titulos-progresso">Resumo do Pedido</h2>
+                <div id="resumo-pedido" class="resumo-pedido"></div>
+            </div>
+
+            <button id="botao-voltar-pagamento" class="botao-voltar">Voltar</button>
+            <button id="botao-finalizar-pagamento">Finalizar Pagamento</button>
+        </section>
+
+        <section id="tela-revisao" class="tela" style="display:none;">
+            <h2 class="titulos-progresso">Pedido Confirmado!</h2>
+            <div class="container">
+                <p style="text-align: center; font-size: 1.2em;">
+                    Obrigado pela sua compra! Os detalhes do seu pedido foram enviados para o seu e-mail.
+                </p>
+            </div>
+        </section>
     </main>
 
-    <footer>
+    <script src="./script.js"></script>
 
-    </footer>
-    <script src="script.js"></script>
 </body>
 
 </html>
