@@ -12,32 +12,44 @@ body {
 header {
     display: flex;
     align-items: center;
-    justify-content: center; 
+    justify-content: center;
     margin-bottom: 16px;
     width: 100%;
 }
 
 .logo-titulo {
-    max-width: 700px; 
-    width: 100%;     
+    max-width: 700px;
+    width: 100%;
     height: auto;
-    margin: 0 auto; 
+    margin: 0 auto;
     padding: 0 20px;
 }
 
 .barra-progresso {
     background: linear-gradient(to right, #0cecf8, #7E73D1, #f914a5);
-    margin: 10px auto;
+    margin: 30px auto;
     padding: 5px;
     border-radius: 12px;
     max-width: 1100px;
     height: auto;
 }
 
+.etapa-item.ativa-atual .circulo {
+    box-shadow: 0 0 6px black;
+    font-weight: bold;
+    transition: all 0.6s;
+}
+
+.etapa-item.ativa-atual .etapa-texto {
+    font-size: 18px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
 .lista-etapas {
     display: flex;
     list-style: none;
-    justify-content: space-between; 
+    justify-content: space-between;
     padding: 5px;
     margin: 5px;
 }
@@ -57,7 +69,7 @@ header {
     align-items: center;
     width: 40px;
     height: 40px;
-    border-radius: 50px; 
+    border-radius: 50px;
     margin: 10px;
 }
 
@@ -80,19 +92,19 @@ header {
 .container {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     display: grid;
-    margin: 0 auto; 
-    padding: 10px; 
-    max-width: 1200px; 
-    gap: 25px; 
+    margin: 0 auto;
+    padding: 10px;
+    max-width: 1200px;
+    gap: 25px;
 }
 
 .box {
     background-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 15px rgba(217, 217, 217, 0.2); 
-    overflow: hidden; 
+    box-shadow: 0 4px 15px rgba(217, 217, 217, 0.2);
+    overflow: hidden;
     cursor: pointer;
-    text-align: center; 
-    border: 1px solid transparent; 
+    text-align: center;
+    border: 1px solid transparent;
     border-radius: 12px;
     padding-bottom: 10px;
 }
@@ -102,8 +114,8 @@ header {
 }
 
 .box .evento-imagem {
-    display: block; 
-    object-fit: cover; 
+    display: block;
+    object-fit: cover;
     width: 100%;
     height: 200px;
 }
@@ -120,12 +132,12 @@ header {
 #botao-avancar-servicos,
 #botao-finalizar-pagamento {
     color: white;
-    font-size: 15px;
-    border-radius: 12px;
-    height: 40px;
+    text-align: center;
     border: none;
     cursor: pointer;
-    text-align: center;
+    font-size: 15px;
+    height: 40px;
+    border-radius: 12px;
 }
 
 .botao-selecionar-evento,
@@ -134,18 +146,28 @@ header {
 #botao-avancar-servicos,
 #botao-finalizar-pagamento {
     background: linear-gradient(to right, #0cecf8, #7E73D1, #f914a5);
+    background-size: 200% auto;
+    transition: background-position 0.5s ease;
+}
+
+.botao-selecionar-evento:hover,
+.botao-selecionar-setor:hover,
+#botao-avancar-lugar:hover,
+#botao-avancar-servicos:hover,
+#botao-finalizar-pagamento:hover {
+    background-position: right center;
 }
 
 .botao-detalhes {
-    background-color: transparent;
     border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: transparent;
     color: white;
+    cursor: pointer;
     font-size: 15px;
     border-radius: 12px;
     height: 40px;
     width: 120px;
     margin: 5px;
-    cursor: pointer;
 }
 
 .botao-detalhes:hover {
@@ -177,16 +199,29 @@ header {
     background-color: #3a3a3a;
 }
 
+.camarote-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}
+
+.img-mapa-camarote {
+    max-width: 500px;
+    border-radius: 12px;
+    margin: 10px;
+}
+
 /* Botões de Lugar */
 .botao-lugar {
-    background: #141414;
     border: 1px solid rgba(255, 255, 255, 0.3);
+    background: #141414;
+    color: white;
+    cursor: pointer;
     border-radius: 10px;
     margin: 8px;
     padding: 12px;
     font-size: 15px;
-    color: white;
-    cursor: pointer;
 }
 
 .botao-lugar.selecionado {
@@ -213,6 +248,16 @@ header {
     align-items: center;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+/* Melhoria na Seleção de Serviços */
+.box-servico {
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.box-servico:has(input:checked) {
+    border-color: #f914a5;
+    background-color: rgba(249, 20, 165, 0.1);
 }
 
 .box-servico:hover {
@@ -249,9 +294,9 @@ header {
 .container-pagamento {
     display: flex;
     flex-wrap: wrap;
+    margin: 0 auto;
     gap: 30px;
     max-width: 900px;
-    margin: 0 auto;
     padding: 10px;
 }
 
@@ -319,6 +364,10 @@ header {
     border-color: #f914a5;
 }
 
+#parcelas-cartao {
+    color: gray;
+}
+
 .form-linha {
     display: flex;
     gap: 15px;
@@ -328,29 +377,29 @@ header {
     flex: 1;
 }
 
-#resumo-pedido {
+#resumo-pedido-revisao {
     padding: 20px;
     text-align: left;
 }
 
-#resumo-pedido ul {
+#resumo-pedido-revisao ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-#resumo-pedido li {
+#resumo-pedido-revisao li {
     display: flex;
     justify-content: space-between;
     padding: 8px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-#resumo-pedido li:last-child {
+#resumo-pedido-revisao li:last-child {
     border-bottom: none;
 }
 
-#resumo-pedido .total {
+#resumo-pedido-revisao .total {
     margin-top: 15px;
     padding-top: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
@@ -358,4 +407,98 @@ header {
     font-size: 1.2em;
     display: flex;
     justify-content: space-between;
+}
+
+/* Camarotes */
+
+.mapa-camarotes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.camarote-box {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.camarote-box h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #f914a5;
+}
+
+.assentos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.assento {
+    background-color: #141414;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.assento:hover {
+    background-color: #3a3a3a;
+    transform: scale(1.05);
+}
+
+.assento.selecionado {
+    background: linear-gradient(to right, #0cecf8, #7E73D1);
+    border-color: #fff;
+    font-weight: bold;
+}
+
+/* Modal detalhes */
+.modal {
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    z-index: 1;
+}
+
+.modal-conteudo {
+    margin: 10% auto;
+    background: linear-gradient(to right, #0cecf8, #7E73D1, #f914a5);
+    color: white;
+    position: relative;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 450px;
+}
+
+.modal-fechar {
+    color: white;
+    position: absolute;
+    cursor: pointer;
+    top: 12px;
+    right: 18px;
+    font-size: 28px;
 }

@@ -4,22 +4,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const selecaoUsuario = {
         evento: null,
         setor: null,
-        lugar: null,
+        lugares: [],
         servicos: []
     };
 
     const detalhesEventos = {
         1: {
             titulo: "Rock in Rio",
-            descricao: "Imagine Dragons, Iron Maiden, Ed Sheeran e muito mais!\n\n• 4 a 13 de setembro de 2026\n• Horário: 18:00\n• Local: Parque Olímpico, Rio de Janeiro, RJ\n\n<a style='font-weight: bold;'>Preços e Setores:</a>\n\n• Pista Comum: R$ 320,00\n• Cadeiras Numeradas: R$ 390,00\n• Mezaninos: R$ 500,00\n• Pista Premium: R$ 680,00\n• Camarotes: R$ 1.500,00",
+            descricao: "Imagine Dragons, Iron Maiden, Ed Sheeran e muito mais!\n\n• 4 a 13 de setembro de 2026\n• Horário: 18:00\n• Local: Parque Olímpico, Rio de Janeiro, RJ\n\n<a style='font-weight: bold;'>Preços e Setores:</a>\n\n• Pista Comum: R$ 320,00\n• Pista Premium: R$ 680,00\n• Camarotes: R$ 1.500,00",
         },
         2: {
             titulo: "Tomorrowland Brasil",
-            descricao: "Alok, Vintage Culture, David Guetta e muito mais!\n\n• 10 a 12 de outubro de 2025\n• Horário: 16:00\n• Local: Parque Maeda - Itu/SP\n\n<a style='font-weight: bold;'>Preços e Setores:</a>\n\n• Pista Comum: R$ 320,00\n• Cadeiras Numeradas: R$ 390,00\n• Mezaninos: R$ 500,00\n• Pista Premium: R$ 680,00\n• Camarotes: R$ 1.500,00"
+            descricao: "Alok, Vintage Culture, David Guetta e muito mais!\n\n• 10 a 12 de outubro de 2025\n• Horário: 16:00\n• Local: Parque Maeda - Itu/SP\n\n<a style='font-weight: bold;'>Preços e Setores:</a>\n\n• Pista Comum: R$ 320,00\n• Pista Premium: R$ 680,00\n• Camarotes: R$ 1.500,00"
         },
         3: {
             titulo: "Lollapalooza",
-            descricao: "Sabrina Carpenter, Deftones, Lorde, Tyler e muito mais!\n\n• 20 a 22 de março de 2026\n• Horário: 18:00\n• Autódromo de Interlagos - São Paulo/SP\n\n<a style='font-weight: bold;'>Preços e Setores:</a>\n\n• Pista Comum: R$ 320,00\n• Cadeiras Numeradas: R$ 390,00\n• Mezaninos: R$ 500,00\n• Pista Premium: R$ 680,00\n• Camarotes: R$ 1.500,00"
+            descricao: "Sabrina Carpenter, Deftones, Lorde, Tyler e muito mais!\n\n• 20 a 22 de março de 2026\n• Horário: 18:00\n• Autódromo de Interlagos - São Paulo/SP\n\n<a style='font-weight: bold;'>Preços e Setores:</a>\n\n• Pista Comum: R$ 320,00\n• Pista Premium: R$ 680,00\n• Camarotes: R$ 1.500,00"
         }
     };
     const setoresComLugarMarcado = ["Cadeiras Numeradas", "Camarotes"];
@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const etapas = document.querySelectorAll('.etapa-item');
         etapas.forEach((etapa, index) => {
             etapa.classList.toggle('ativa', index < etapaAtual);
+            etapa.classList.toggle('ativa-atual', index === etapaAtual - 1);
         });
     }
 
@@ -54,8 +55,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function atualizarResumoPedido() {
-        const containerResumo = document.getElementById('resumo-pedido');
+    function gerarMapaCamarote() {
+        const container = document.getElementById('container-lugares');
+        container.innerHTML = '';
+
+        // Wrapper flexível para imagem + mapa
+        const wrapper = document.createElement('div');
+        wrapper.className = 'camarote-wrapper';
+
+        // Imagem do mapa
+        const imgMapa = document.createElement('img');
+        imgMapa.src = './imagens/mapa.png';
+        imgMapa.alt = 'Mapa dos camarotes';
+        imgMapa.className = 'img-mapa-camarote';
+        wrapper.appendChild(imgMapa);
+
+        // Mapa de camarotes
+        const mapaDiv = document.createElement('div');
+        mapaDiv.className = 'mapa-camarotes';
+
+        for (let i = 1; i <= 4; i++) {
+            const camaroteBox = document.createElement('div');
+            camaroteBox.className = 'camarote-box';
+
+            const tituloCamarote = document.createElement('h4');
+            tituloCamarote.textContent = `Área ${i}`;
+            camaroteBox.appendChild(tituloCamarote);
+
+            const assentosContainer = document.createElement('div');
+            assentosContainer.className = 'assentos-container';
+
+            for (let j = 1; j <= 5; j++) {
+                const assento = document.createElement('div');
+                assento.className = 'assento';
+                assento.textContent = `C${j}`;
+                assento.dataset.lugar = `C${i}-A${j}`;
+
+                assento.addEventListener('click', () => {
+                    assento.classList.toggle('selecionado');
+                    const lugarId = assento.dataset.lugar;
+
+                    if (assento.classList.contains('selecionado')) {
+                        if (!selecaoUsuario.lugares.includes(lugarId)) {
+                            selecaoUsuario.lugares.push(lugarId);
+                        }
+                    } else {
+                        selecaoUsuario.lugares = selecaoUsuario.lugares.filter(l => l !== lugarId);
+                    }
+                });
+                assentosContainer.appendChild(assento);
+            }
+            camaroteBox.appendChild(assentosContainer);
+            mapaDiv.appendChild(camaroteBox);
+        }
+
+        wrapper.appendChild(mapaDiv);
+        container.appendChild(wrapper);
+    }
+
+    function atualizarResumoPedido(idResumo = 'resumo-pedido-revisao') {
+        const containerResumo = document.getElementById(idResumo);
         if (!containerResumo) return;
 
         let total = 0;
@@ -76,6 +135,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 total += precoServico;
                 itens.push(`<li><span>- ${servico.nome}</span> <span>R$ ${precoServico.toFixed(2)}</span></li>`);
             });
+        }
+
+        if (selecaoUsuario.lugares && selecaoUsuario.lugares.length > 0) {
+            itens.push(`<li><strong>Lugares:</strong> ${selecaoUsuario.lugares.join(', ')}</li>`);
+        } else if (selecaoUsuario.lugar) {
+            itens.push(`<li><strong>Lugar:</strong> ${selecaoUsuario.lugar}</li>`);
         }
 
         containerResumo.innerHTML = `
@@ -121,38 +186,55 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.botao-selecionar-setor').forEach(btn => {
         btn.addEventListener('click', () => {
             const box = btn.closest('.box');
-            const seletorQuantidade = box.querySelector('.seletor-quantidade');
-            const quantidade = parseInt(seletorQuantidade.value, 10);
-
-            if (!quantidade || quantidade < 1) {
-                return alert('Por favor, selecione uma quantidade válida de ingressos.');
-            }
+            const nomeSetor = box.getAttribute('data-setor-nome');
 
             selecaoUsuario.setor = {
-                nome: box.getAttribute('data-setor-nome'),
-                preco: box.getAttribute('data-setor-preco'),
-                quantidade: quantidade
+                nome: nomeSetor,
+                preco: box.getAttribute('data-setor-preco')
             };
+            selecaoUsuario.lugares = []; // Limpa a seleção anterior
 
-            if (setoresComLugarMarcado.includes(selecaoUsuario.setor.nome)) {
-                gerarBotoesDeLugar();
+            if (nomeSetor === "Camarotes") {
+                gerarMapaCamarote(); // Gera o mapa de assentos
                 navegarParaTela('tela-lugares');
             } else {
-                selecaoUsuario.lugar = null;
-                atualizarBarraDeProgresso(3);
-                navegarParaTela('tela-servicos');
+                const seletorQuantidade = box.querySelector('.seletor-quantidade');
+                const quantidade = parseInt(seletorQuantidade.value, 10);
+
+                if (!quantidade || quantidade < 1) {
+                    return alert('Por favor, selecione uma quantidade válida de ingressos.');
+                }
+                selecaoUsuario.setor.quantidade = quantidade;
+
+                if (setoresComLugarMarcado.includes(nomeSetor)) {
+                    gerarBotoesDeLugar();
+                    navegarParaTela('tela-lugares');
+                } else {
+                    selecaoUsuario.lugares = []; // Garante que não há lugar para pista
+                    atualizarBarraDeProgresso(3);
+                    navegarParaTela('tela-servicos');
+                }
             }
         });
     });
 
     document.getElementById('botao-avancar-lugar').addEventListener('click', () => {
-        if (!selecaoUsuario.lugar) {
-            return alert('Por favor, selecione um lugar para continuar.');
+        if (selecaoUsuario.setor.nome === "Camarotes") {
+            if (selecaoUsuario.lugares.length === 0) {
+                return alert('Por favor, selecione pelo menos um lugar para continuar.');
+            }
+            // Define a quantidade com base no número de assentos selecionados
+            selecaoUsuario.setor.quantidade = selecaoUsuario.lugares.length;
+        } else {
+            // Lógica antiga para outros setores com lugar marcado
+            if (!selecaoUsuario.lugar) {
+                return alert('Por favor, selecione um lugar para continuar.');
+            }
         }
+
         atualizarBarraDeProgresso(3);
         navegarParaTela('tela-servicos');
     });
-
     document.getElementById('botao-avancar-servicos').addEventListener('click', () => {
         selecaoUsuario.servicos = [];
         document.querySelectorAll('input[name="servico"]:checked').forEach(checkbox => {
@@ -162,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         atualizarBarraDeProgresso(4);
-        atualizarResumoPedido();
+        atualizarResumoPedido('resumo-pedido-pagamento');
         navegarParaTela('tela-pagamento');
     });
 
@@ -172,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return alert('Por favor, preencha todos os dados do cartão.');
         }
         atualizarBarraDeProgresso(5);
+        atualizarResumoPedido('resumo-pedido-revisao'); 
         navegarParaTela('tela-revisao');
     });
 
@@ -183,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('botao-voltar-lugares').addEventListener('click', () => {
         selecaoUsuario.lugar = null;
+        selecaoUsuario.lugares = []; 
         atualizarBarraDeProgresso(2);
         navegarParaTela('tela-setores');
     });

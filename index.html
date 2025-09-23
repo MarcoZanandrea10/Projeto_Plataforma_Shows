@@ -52,7 +52,6 @@
 
         <!--EVENTOS-->
         <section id="tela-eventos" class="tela ativa">
-            <h2 class="titulos-progresso">Selecione o Evento</h2>
             <div class="container">
                 <div class="box" data-evento-id="1"> <img src="imagens/rock_in_rio.png" alt="Rock in Rio"
                         class="evento-imagem">
@@ -83,12 +82,12 @@
 
         <!--SETORES/ASSENTOS-->
         <section id="tela-setores" class="tela" style="display:none;">
-            <h2 class="titulos-progresso">Escolha o Setor/Assento</h2>
+            <h2 class="titulos-progresso">Escolha o Setor</h2>
             <div class="container">
                 <div class="box" data-setor-nome="Pista Comum" data-setor-preco="320.00">
                     <h3>Pista Comum</h3>
                     <p>R$ 320,00</p>
-                    <label for="quantidade-pista-comum">Quantidade:</label>
+                    <label for="quantidade-pista-comum"></label>
                     <select id="quantidade-pista-comum" class="seletor-quantidade">
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -114,14 +113,6 @@
                 <div class="box" data-setor-nome="Camarotes" data-setor-preco="1500.00">
                     <h3>Camarotes</h3>
                     <p>R$ 1.500,00</p>
-                    <label for="quantidade-camarotes">Quantidade:</label>
-                    <select id="quantidade-camarotes" class="seletor-quantidade">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
                     <button class="botao-selecionar-setor">Selecionar</button>
                 </div>
             </div>
@@ -147,7 +138,8 @@
                     </div>
                     <div class="servico-preco">
                         <p>R$ 50,00</p>
-                        <input type="checkbox" name="servico" value="Estacionamento" data-preco="50.00">
+                        <input style="display:none" type="checkbox" name="servico" value="Estacionamento"
+                            data-preco="50.00">
                     </div>
                 </label>
                 <label class="box-servico">
@@ -157,7 +149,8 @@
                     </div>
                     <div class="servico-preco">
                         <p>R$ 35,00</p>
-                        <input type="checkbox" name="servico" value="Copo Oficial" data-preco="35.00">
+                        <input style="display:none" type="checkbox" name="servico" value="Copo Oficial"
+                            data-preco="35.00">
                     </div>
                 </label>
                 <label class="box-servico">
@@ -167,7 +160,8 @@
                     </div>
                     <div class="servico-preco">
                         <p>R$ 20,00</p>
-                        <input type="checkbox" name="servico" value="Seguro Ingresso" data-preco="20.00">
+                        <input style="display:none" type="checkbox" name="servico" value="Seguro Ingresso"
+                            data-preco="20.00">
                     </div>
                 </label>
             </div>
@@ -185,19 +179,19 @@
                     <div id="detalhes-cartao" class="metodo-pagamento-detalhes">
                         <form class="form-pagamento">
                             <label for="num-cartao">Número do Cartão</label>
-                            <input type="text" id="num-cartao" placeholder="0000 0000 0000 0000" required>
+                            <input type="text" id="num-cartao" placeholder="0000 0000 0000 0000">
 
                             <label for="nome-cartao">Nome no Cartão</label>
-                            <input type="text" id="nome-cartao" placeholder="Como aparece no cartão" required>
+                            <input type="text" id="nome-cartao" placeholder="Como aparece no cartão">
 
                             <div class="form-linha">
                                 <div>
                                     <label for="validade-cartao">Validade</label>
-                                    <input type="text" id="validade-cartao" placeholder="MM/AA" required>
+                                    <input type="text" id="validade-cartao" placeholder="MM/AA">
                                 </div>
                                 <div>
                                     <label for="cvv-cartao">CVV</label>
-                                    <input type="text" id="cvv-cartao" placeholder="123" required>
+                                    <input type="text" id="cvv-cartao" placeholder="123">
                                 </div>
                             </div>
                             <label for="parcelas-cartao">Parcelamento</label>
@@ -206,14 +200,13 @@
                                 <option value="2">2x sem juros</option>
                                 <option value="3">3x sem juros</option>
                             </select>
+                            <div class="pagamento-resumo">
+                                <h2 class="titulos-progresso">Resumo do Pedido</h2>
+                                <div id="resumo-pedido-pagamento" class="resumo-pedido"></div>
+                            </div>
                         </form>
                     </div>
                 </div>
-            </div>
-
-            <div class="pagamento-resumo">
-                <h2 class="titulos-progresso">Resumo do Pedido</h2>
-                <div id="resumo-pedido" class="resumo-pedido"></div>
             </div>
 
             <button id="botao-voltar-pagamento" class="botao-voltar">Voltar</button>
@@ -227,11 +220,13 @@
                     Obrigado pela sua compra! Os detalhes do seu pedido foram enviados para o seu e-mail.
                 </p>
             </div>
+            <div class="pagamento-resumo">
+                <h2 class="titulos-progresso">Resumo do Pedido</h2>
+                <div id="resumo-pedido-revisao" class="resumo-pedido"></div>
+            </div>
         </section>
     </main>
 
     <script src="./script.js"></script>
-
 </body>
-
 </html>
